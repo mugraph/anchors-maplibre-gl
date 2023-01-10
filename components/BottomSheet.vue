@@ -1,44 +1,21 @@
 <template>
-  <div id="snap-points-wrapper" :style="{ height: `${wrapperHeight}px` }">
-    <div
-      v-for="(point, index) in snapPoints"
-      :key="point"
-      class="indicator"
-      :style="{ top: snapValues[index] + 'px' }"
-    >
-      <div class="square snap">
-        <div>{{ snapValues[index] }}</div>
-      </div>
-      <div class="square snap"></div>
-    </div>
-    <div
-      v-for="(point, index) in breakPoints"
-      :key="point"
-      class="indicator"
-      :style="{ top: breakPoints[index] + 'px' }"
-    >
-      <div class="square break">
-        <div>{{ breakPoints[index] }}</div>
-      </div>
-      <div class="square break"></div>
-    </div>
-    <div
-      id="sheet"
-      ref="sheetRef"
-      class="bg-yellow-200"
-      :style="{ height: `${sheetHeight}px` }"
-    >
-      <div id="sheetHeader" ref="sheetHeaderRef"></div>
-      <div id="sheetContent" class="px-14">
-        <span>sheetHeight: {{ sheetHeight }}</span>
-        <br />
-        <span>active Snap: {{ activeSnap.activeSnap }}</span>
-        <br />
-        <span>SnapValues: {{ snapValues }}</span>
-        <br />
-        <span>Breakpoints: {{ breakPoints }}</span>
-        <br />
-        <br />
+  <BottomSheetHelper
+    :wrapperHeight="wrapperHeight"
+    :snapPoints="snapPoints"
+    :snapHeights="snapHeights"
+    :threshold="threshold * 2"
+    :sheetHeight="sheetHeight"
+    :activeSnap="activeSnap.activeSnap"
+  />
+  <div id="sheet-wrapper" :style="{ height: `${wrapperHeight}px` }">
+    <div id="sheet" ref="sheetRef" :style="{ height: `${sheetHeight}px` }">
+      <div id="sheet-header" ref="sheetHeaderRef"></div>
+      <div
+        id="sheet-content"
+        ref="sheetContentRef"
+        class="px-14"
+        :class="[getContentOverflow]"
+      >
         <slot></slot>
       </div>
     </div>
@@ -47,42 +24,44 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { debounce } from '@/helpers/util';
+import { debounce, findClosest, elScrolledTop } from '@/helpers/util';
 import { useDrag } from '@vueuse/gesture';
 import { useMotionProperties, useMotionTransitions } from '@vueuse/motion';
 import { useBottomSheetStore } from '../stores/bottomSheet';
 
 const sheetRef = ref();
 const sheetHeaderRef = ref();
+const sheetContentRef = ref();
 
 let isDragging = ref(false);
+let velocity = ref(1);
 
 const props = defineProps({
   topOffset: {
     Type: Number,
     default: 54,
   },
-  active: {
-    Type: Number,
-    default: 0,
-  },
   duration: {
     type: Number,
-    default: 200,
+    default: 400,
   },
 });
+
 const activeSnap = useBottomSheetStore();
 const windowHeight = ref(0);
 const sheetHeaderHeight = ref(0);
 const snapPoints = [0, 0.5, 1];
 
-//const activeSnap = ref(null);
-
 const wrapperHeight = computed(() => {
   return windowHeight.value - props.topOffset;
 });
 
-const snapValues = computed(() => {
+// Define threshold
+const threshold = computed(() => {
+  return wrapperHeight.value * 0.15;
+});
+
+const snapHeights = computed(() => {
   let values = [];
   for (let point of snapPoints) {
     let value = wrapperHeight.value * point;
@@ -92,21 +71,15 @@ const snapValues = computed(() => {
 });
 
 const sheetHeight = computed(() => {
-  let y = snapValues.value[activeSnap.activeSnap];
+  let y = snapHeights.value[activeSnap.activeSnap];
   if (activeSnap.activeSnap === null) y = wrapperHeight.value;
+
   return wrapperHeight.value - y;
 });
 
-const breakPoints = computed(() => {
-  let points = [];
-  for (let i = 0; i <= snapValues.value.length - 2; i++) {
-    if (i === snapValues.value.length - 2)
-      points.push((wrapperHeight.value + snapValues.value[i]) / 2);
-    else points.push((snapValues.value[i] + snapValues.value[i + 1]) / 2);
-  }
-  console.log(points);
-  return points;
-});
+const getContentOverflow = computed(() =>
+  isDragging.value ? 'overflow-y-hidden' : 'overflow-y-auto'
+);
 
 const { motionProperties } = useMotionProperties(sheetRef);
 const { push } = useMotionTransitions(motionProperties);
@@ -118,10 +91,28 @@ const keyFrame = {
   delay: 0,
 };
 
+function allowDrag(ctx) {
+  const {
+    swipe: [, sy],
+    movement: [, y],
+  } = ctx;
+
+  const isDragUp = y < 0 || sy < 0;
+
+  if (isDragUp && activeSnap.activeSnap == 0) {
+    return false;
+  } else if (
+    !isDragUp &&
+    activeSnap.activeSnap == 0 &&
+    !elScrolledTop(sheetContentRef.value)
+  ) {
+    return false;
+  } else return true;
+}
+
 function dragHandler(ctx) {
   isDragging.value = false;
 
-  //console.log('ctx: ', ctx);
   const { dragging } = ctx;
   if (dragging) {
     handleDrag(ctx);
@@ -131,44 +122,59 @@ function dragHandler(ctx) {
 }
 
 function handleDrag(ctx) {
-  //if (ctx.tap || !allowDrag(ctx)) return;
+  if (ctx.tap || !allowDrag(ctx)) return;
   isDragging.value = true;
 
   const {
     movement: [, y],
   } = ctx;
-  //const setY = axisY.value + y;
-  const setY = sheetHeight.value + y * -1;
 
-  // Stop at wrapperHeight
-  if (setY > wrapperHeight.value) {
-    const max = wrapperHeight.value - snapValues.value[0];
+  const max = wrapperHeight.value - snapHeights.value[0];
+  let setY = sheetHeight.value + y * -1;
+
+  if (setY >= wrapperHeight.value) {
     moveSheet(max, false);
+    // Snap to top
+    if (sheetRef.value.clientHeight == max) {
+      activeSnap.setActiveSnap(
+        snapHeights.value.indexOf(max - wrapperHeight.value)
+      );
+    }
+  } else {
+    moveSheet(setY, false);
   }
-  moveSheet(setY, false);
 }
 
-const findClosest = (array, goal) => {
-  return array.reduce((prev, curr) => {
-    return Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev;
-  });
-};
-
 function handleDragEnd(ctx) {
-  // if (ctx.tap || !allowDrag(ctx)) return;
+  if (ctx.tap || !allowDrag(ctx)) return;
   isDragging.value = false;
+
+  // Keep velocity between 1 and 5
+  const v = ctx.velocity;
+  velocity.value = v >= 1 ? (v < 5 ? v : 5) : 1;
+
+  // Set direction to -1 [down] or 1 [up]
+  const direction = ctx.direction[1] < 0 ? 1 : -1;
 
   const {
     movement: [, y],
   } = ctx;
 
-  const snapScale = wrapperHeight.value - (sheetHeight.value + y * -1);
-  const targetSnap = findClosest(snapValues.value, snapScale);
+  let snapScale = wrapperHeight.value - (sheetHeight.value + y * -1);
 
-  if (snapValues.value.indexOf(targetSnap) === activeSnap.activeSnap) {
+  if (direction === 1) {
+    snapScale = (snapScale - threshold.value) / velocity.value;
+  } else {
+    snapScale = (snapScale + threshold.value) * velocity.value;
+  }
+
+  const targetHeight = findClosest(snapHeights.value, snapScale);
+  const targetIndex = snapHeights.value.indexOf(targetHeight);
+
+  if (targetIndex === activeSnap.activeSnap) {
     moveSheet(undefined, true);
   } else {
-    activeSnap.setActiveSnap(snapValues.value.indexOf(targetSnap));
+    activeSnap.setActiveSnap(targetIndex);
   }
 }
 
@@ -177,10 +183,13 @@ function moveSheet(v, withKeyFrame) {
   const mP = motionProperties;
   if (!v || v === undefined) v = sheetHeight.value;
   if (withKeyFrame) {
-    push('y', -v, mP, { ...keyFrame, duration: props.duration });
+    push('y', -v, mP, {
+      ...keyFrame,
+      duration: props.duration / velocity.value,
+    });
     push('height', v, mP, {
       ...keyFrame,
-      duration: props.duration,
+      duration: props.duration / velocity.value,
     });
   } else {
     push('y', -v, mP, keyFrame);
@@ -207,7 +216,6 @@ onMounted(() => {
 useDrag(dragHandler, {
   domTarget: sheetRef,
   filterTaps: true,
-  // preventWindowScrollY: true,
   useTouch: true,
 });
 
@@ -215,65 +223,34 @@ watch(
   () => activeSnap.activeSnap,
   () => {
     moveSheet(undefined, true);
+    sheetContentRef.value.scroll({ top: 0, behavior: 'smooth' });
   }
 );
 </script>
 
 <style scoped>
-#snap-points-wrapper {
+#sheet-wrapper {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   pointer-events: none;
-  z-index: 900;
+  z-index: 800;
 }
-.indicator {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  width: calc(100% + 20px);
-  left: -10px;
-}
-
-.square {
-  height: 20px;
-  width: 20px;
-  transform: rotate(45deg);
-  margin-top: -10px;
-  z-index: 1000;
-}
-
-.square > div {
-  margin-right: -24px;
-  margin-top: -14px;
-  padding-left: 20px;
-  font-size: 12px;
-  transform: rotate(-45deg);
-}
-
-.snap {
-  background-color: lightcoral;
-}
-
-.break {
-  background-color: lightseagreen;
-}
-
 #sheet {
-  height: 0;
   position: relative;
   top: 100%;
+  background-color: wheat;
 }
 
-#sheetHeader {
+#sheet-header {
   pointer-events: auto;
   cursor: ns-resize;
   padding-bottom: 10px;
   padding-top: 10px;
 }
 
-#sheetHeader::before {
+#sheet-header::before {
   position: absolute;
   content: '';
   display: block;
@@ -286,9 +263,8 @@ watch(
   background-color: rgba(0, 0, 0, 0.14);
 }
 
-#sheetContent {
+#sheet-content {
   pointer-events: auto;
-  overflow-y: auto;
   height: 100%;
 }
 </style>

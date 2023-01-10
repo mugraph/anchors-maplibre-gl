@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
+    "@vueuse/core": "^9.10.0",
     "@vueuse/gesture": "^2.0.0-beta.1",
     "@vueuse/motion": "^2.0.0-beta.12",
     "maplibre-gl": "^2.4.0",

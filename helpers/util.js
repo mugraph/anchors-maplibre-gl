@@ -15,3 +15,14 @@ export function debounce(callback, wait) {
     }, wait);
   };
 }
+
+export const elScrolledTop = (el) => {
+  const { scrollTop } = el;
+  return scrollTop === 0;
+};
+
+export const findClosest = (array, goal) => {
+  return array.reduce((prev, curr) => {
+    return Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev;
+  });
+};
