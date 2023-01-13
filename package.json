@@ -1,5 +1,5 @@
 {
-  "name": "achors-maplibre-gl",
+  "name": "anchors-maplibre-gl",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
+    "@vue-leaflet/vue-leaflet": "^0.7.0",
     "@vueuse/core": "^9.10.0",
     "@vueuse/gesture": "^2.0.0-beta.1",
     "@vueuse/motion": "^2.0.0-beta.12",
+    "leaflet": "^1.9.3",
     "maplibre-gl": "^2.4.0",
-    "mitt": "^3.0.0",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
@@ -22,7 +23,7 @@
   "devDependencies": {
     "@mdi/js": "^7.0.96",
     "@rushstack/eslint-patch": "^1.1.4",
-    "@vitejs/plugin-vue": "^3.1.0",
+    "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "autoprefixer": "^10.4.13",

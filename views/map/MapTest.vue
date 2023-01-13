@@ -51,49 +51,56 @@
         </mgl-geo-json-source>
       </mgl-map>
     </div>
-    Loaded Count: {{ loaded }}<br />
-    Is Zooming: {{ isZooming }}<br />
-    <div>
-      <input type="radio" id="one" value="top-left" v-model="controlPosition" />
-      <label for="one">top-left</label>
-      <br />
-      <input
-        type="radio"
-        id="tw0"
-        value="top-right"
-        v-model="controlPosition"
-      />
-      <label for="tw0">top-right</label>
-      <br />
-      <input
-        type="radio"
-        id="three"
-        value="bottom-left"
-        v-model="controlPosition"
-      />
-      <label for="three">bottom-left</label>
-      <br />
-      <input
-        type="radio"
-        id="four"
-        value="bottom-right"
-        v-model="controlPosition"
-      />
-      <label for="four">bottom-right</label>
-      <br />
-      <span>Attribution Position: {{ controlPosition }}</span>
-    </div>
-    <div>
-      <input type="checkbox" v-model="useClasses" id="noclasses" />
-      <label for="noclasses">Use Custom Control Classes</label>
-    </div>
-    <div>
-      <input type="checkbox" v-model="showCustomControl" id="showcustom" />
-      <label for="showcustom">Show Custom Control</label>
-    </div>
-    <div>
-      <input type="checkbox" v-model="showMap" id="showmap" />
-      <label for="showmap">Show Map</label>
+    <div class="px-10">
+      Loaded Count: {{ loaded }}<br />
+      Is Zooming: {{ isZooming }}<br />
+      <div>
+        <input
+          type="radio"
+          id="one"
+          value="top-left"
+          v-model="controlPosition"
+        />
+        <label for="one">top-left</label>
+        <br />
+        <input
+          type="radio"
+          id="tw0"
+          value="top-right"
+          v-model="controlPosition"
+        />
+        <label for="tw0">top-right</label>
+        <br />
+        <input
+          type="radio"
+          id="three"
+          value="bottom-left"
+          v-model="controlPosition"
+        />
+        <label for="three">bottom-left</label>
+        <br />
+        <input
+          type="radio"
+          id="four"
+          value="bottom-right"
+          v-model="controlPosition"
+        />
+        <label for="four">bottom-right</label>
+        <br />
+        <span>Attribution Position: {{ controlPosition }}</span>
+      </div>
+      <div>
+        <input type="checkbox" v-model="useClasses" id="noclasses" />
+        <label for="noclasses">Use Custom Control Classes</label>
+      </div>
+      <div>
+        <input type="checkbox" v-model="showCustomControl" id="showcustom" />
+        <label for="showcustom">Show Custom Control</label>
+      </div>
+      <div>
+        <input type="checkbox" v-model="showMap" id="showmap" />
+        <label for="showmap">Show Map</label>
+      </div>
     </div>
   </div>
 </template>
