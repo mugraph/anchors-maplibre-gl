@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
 
-export const useBottomSheetStore = defineStore('bottomSheet', {
+export const useBottomSheetStore = defineStore('snap', {
   state: () => {
     return {
-      activeSnap: 2,
+      active: 2,
     };
   },
   actions: {
-    setActiveSnap(payload) {
-      this.activeSnap = payload;
+    setActive(payload) {
+      this.active = payload;
     },
   },
 });

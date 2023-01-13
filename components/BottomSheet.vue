@@ -5,7 +5,7 @@
     :snapHeights="snapHeights"
     :threshold="threshold * 2"
     :sheetHeight="sheetHeight"
-    :activeSnap="activeSnap.activeSnap"
+    :activeSnap="snap.active"
   />
   <div id="sheet-wrapper" :style="{ height: `${wrapperHeight}px` }">
     <div id="sheet" ref="sheetRef" :style="{ height: `${sheetHeight}px` }">
@@ -47,7 +47,7 @@ const props = defineProps({
   },
 });
 
-const activeSnap = useBottomSheetStore();
+const snap = useBottomSheetStore();
 const windowHeight = ref(0);
 const sheetHeaderHeight = ref(0);
 const snapPoints = [0, 0.5, 1];
@@ -71,8 +71,8 @@ const snapHeights = computed(() => {
 });
 
 const sheetHeight = computed(() => {
-  let y = snapHeights.value[activeSnap.activeSnap];
-  if (activeSnap.activeSnap === null) y = wrapperHeight.value;
+  let y = snapHeights.value[snap.active];
+  if (snap.active === null) y = wrapperHeight.value;
 
   return wrapperHeight.value - y;
 });
@@ -84,11 +84,11 @@ const getContentOverflow = computed(() =>
 const { motionProperties } = useMotionProperties(sheetRef);
 const { push } = useMotionTransitions(motionProperties);
 
-const keyFrame = {
-  type: 'keyframe',
-  ease: 'linear',
-  duration: 0,
-  delay: 0,
+const spring = {
+  type: 'spring',
+  stiffness: 200,
+  damping: 25,
+  mass: 0.5,
 };
 
 function allowDrag(ctx) {
@@ -99,11 +99,11 @@ function allowDrag(ctx) {
 
   const isDragUp = y < 0 || sy < 0;
 
-  if (isDragUp && activeSnap.activeSnap == 0) {
+  if (isDragUp && snap.active == 0) {
     return false;
   } else if (
     !isDragUp &&
-    activeSnap.activeSnap == 0 &&
+    snap.active == 0 &&
     !elScrolledTop(sheetContentRef.value)
   ) {
     return false;
@@ -133,15 +133,13 @@ function handleDrag(ctx) {
   let setY = sheetHeight.value + y * -1;
 
   if (setY >= wrapperHeight.value) {
-    moveSheet(max, false);
+    moveSheet(max);
     // Snap to top
     if (sheetRef.value.clientHeight == max) {
-      activeSnap.setActiveSnap(
-        snapHeights.value.indexOf(max - wrapperHeight.value)
-      );
+      snap.setActive(snapHeights.value.indexOf(max - wrapperHeight.value));
     }
   } else {
-    moveSheet(setY, false);
+    moveSheet(setY);
   }
 }
 
@@ -171,37 +169,26 @@ function handleDragEnd(ctx) {
   const targetHeight = findClosest(snapHeights.value, snapScale);
   const targetIndex = snapHeights.value.indexOf(targetHeight);
 
-  if (targetIndex === activeSnap.activeSnap) {
-    moveSheet(undefined, true);
+  if (targetIndex === snap.active) {
+    moveSheet(undefined);
   } else {
-    activeSnap.setActiveSnap(targetIndex);
+    snap.setActive(targetIndex);
   }
 }
 
-function moveSheet(v, withKeyFrame) {
+function moveSheet(v) {
   if (v > wrapperHeight.value) return;
   const mP = motionProperties;
   if (!v || v === undefined) v = sheetHeight.value;
-  if (withKeyFrame) {
-    push('y', -v, mP, {
-      ...keyFrame,
-      duration: props.duration / velocity.value,
-    });
-    push('height', v, mP, {
-      ...keyFrame,
-      duration: props.duration / velocity.value,
-    });
-  } else {
-    push('y', -v, mP, keyFrame);
-    push('height', v, mP, keyFrame);
-  }
+
+  push('y', -v, mP, spring);
+  push('height', v, mP, spring);
 }
 
 function calculateHeight() {
   windowHeight.value = window.innerHeight;
   sheetHeaderHeight.value = sheetHeaderRef.value.clientHeight;
-
-  moveSheet(sheetHeight.value, true);
+  moveSheet(sheetHeight.value);
 }
 
 const onWindowResize = () => {
@@ -220,9 +207,9 @@ useDrag(dragHandler, {
 });
 
 watch(
-  () => activeSnap.activeSnap,
+  () => snap.active,
   () => {
-    moveSheet(undefined, true);
+    moveSheet(undefined);
     sheetContentRef.value.scroll({ top: 0, behavior: 'smooth' });
   }
 );
