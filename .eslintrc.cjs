@@ -13,6 +13,7 @@ module.exports = {
     '@vue/eslint-config-prettier',
     'prettier',
     'plugin:vuejs-accessibility/recommended',
+    '@vue/typescript/recommended',
   ],
   parserOptions: {
     ecmaVersion: 'latest',

@@ -14,15 +14,18 @@ const routes = [
     component: Home,
     children: [
       {
-        path: 'maplibre',
+        path: 'maplibre/:zoom/:lat/:lng',
+        name: 'maplibre',
         component: MapLibreMap,
       },
       {
         path: 'leaflet',
+        name: 'leaflet',
         component: LeafletMap,
       },
       {
         path: 'maptest',
+        name: 'maptest',
         component: MapTest,
       },
     ],
@@ -34,7 +37,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(() => {
+router.beforeEach(async () => {
   const mapStore = useMapStore();
   mapStore.resetTime();
   return true;

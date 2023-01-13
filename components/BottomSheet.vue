@@ -1,12 +1,12 @@
 <template>
-  <BottomSheetHelper
+  <!-- <BottomSheetHelper
     :wrapperHeight="wrapperHeight"
     :snapPoints="snapPoints"
     :snapHeights="snapHeights"
     :threshold="threshold * 2"
     :sheetHeight="sheetHeight"
     :activeSnap="snap.active"
-  />
+  /> -->
   <div id="sheet-wrapper" :style="{ height: `${wrapperHeight}px` }">
     <div id="sheet" ref="sheetRef" :style="{ height: `${sheetHeight}px` }">
       <div id="sheet-header" ref="sheetHeaderRef"></div>
@@ -33,8 +33,8 @@ const sheetRef = ref();
 const sheetHeaderRef = ref();
 const sheetContentRef = ref();
 
-let isDragging = ref(false);
-let velocity = ref(1);
+const isDragging = ref(false);
+const velocity = ref(1);
 
 const props = defineProps({
   topOffset: {
@@ -62,9 +62,9 @@ const threshold = computed(() => {
 });
 
 const snapHeights = computed(() => {
-  let values = [];
-  for (let point of snapPoints) {
-    let value = wrapperHeight.value * point;
+  const values = [];
+  for (const point of snapPoints) {
+    const value = wrapperHeight.value * point;
     values.push(value);
   }
   return values;
@@ -130,7 +130,7 @@ function handleDrag(ctx) {
   } = ctx;
 
   const max = wrapperHeight.value - snapHeights.value[0];
-  let setY = sheetHeight.value + y * -1;
+  const setY = sheetHeight.value + y * -1;
 
   if (setY >= wrapperHeight.value) {
     moveSheet(max);

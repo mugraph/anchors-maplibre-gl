@@ -1,7 +1,7 @@
 <template>
   <nav
     class="flex items-center p-2 bg-indigo-200"
-    :style="[{ height: navHeight + 'px' }]"
+    :style="[{ 'min-height': navHeight + 'px' }]"
   >
     <Button type="button" class="mx-1 bg-zinc-100" @click="setActive(0)">
       One
@@ -13,10 +13,16 @@
       Close
     </Button>
     <Button type="button" class="mx-1 bg-zinc-100">
-      <RouterLink to="leaflet">Leaflet</RouterLink>
+      <RouterLink :to="{ name: 'leaflet' }">Leaflet</RouterLink>
     </Button>
     <Button type="button" class="mx-1 bg-zinc-100">
-      <RouterLink to="maplibre">Maplibre</RouterLink>
+      <RouterLink
+        :to="{
+          name: 'maplibre',
+          params: { zoom: 14, lat: 53.095, lng: 8.771 },
+        }"
+        >Maplibre</RouterLink
+      >
     </Button>
     <span v-if="mapStore.loadedTime" class="pl-4 text-sm">
       {{ `${mapStore.loadedTime - mapStore.time}ms` }}
@@ -24,6 +30,15 @@
   </nav>
   <div class="flex-grow w-full">
     <RouterView />
+    <div class="w-full">
+      <SvgNumber
+        v-for="(num, index) in numbers"
+        :number="index"
+        :size="36"
+        :key="index"
+      />
+    </div>
+
     <BottomSheet :topOffset="navHeight">
       <ul>
         <li v-for="i in 18" :key="i">
@@ -66,8 +81,7 @@
       @click="setActive(0)"
       type="button"
       class="bg-white rounded ring-2 ring-black/25"
-      :style="{ transform }"
-      :delay="200"
+      :delay="400"
     >
       Open Content
     </Button>
@@ -75,13 +89,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import SvgNumber from '../components/SvgNumber.vue';
 import { useBottomSheetStore } from '../stores/bottomSheet';
 import { useMapStore } from '../stores/map';
 
 const mapStore = useMapStore();
 const navHeight = ref(54);
 const snap = useBottomSheetStore();
+
+const numbers = [...Array(99)];
+console.log(numbers);
 
 const setActive = (v) => {
   snap.setActive(v);

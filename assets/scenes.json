@@ -1,0 +1,410 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "uuid": "54eadfa2-bc39-4d86-ad84-37660d24f513",
+      "common_name": "oeverseehabenbecken",
+      "properties": {
+        "title": "Överseehabenbecken",
+        "flyTo": true,
+        "uuid": "54eadfa2-bc39-4d86-ad84-37660d24f513",
+        "description": "Zum Einstieg in den Stadtrundgang erzählen wir, warum wir einen Stadtrundgang zu Kolonialismus in der Überseestadt machen: Sowohl die Geschichte des Hafenbaus als auch die Handelsbeziehungen, verbinden diesen Ort mit dem Kolonialismus."
+      },
+      "layers": [
+        {
+          "name": "route"
+        },
+        {
+          "name": "scenes"
+        }
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.77135, 53.09422]
+      },
+      "content": {
+        "id": 0,
+        "title": "Einleitung",
+        "image": "/data/images/ueberseetor_001.jpg",
+        "description": "Zum Einstieg in den Stadtrundgang erzählen wir, warum wir einen Stadtrundgang zu Kolonialismus in der Überseestadt machen: Sowohl die Geschichte des Hafenbaus als auch die Handelsbeziehungen, verbinden diesen Ort mit dem Kolonialismus.",
+        "resources": [
+          {
+            "id": 0,
+            "title": "Ankerpunkte der Verflechtung",
+            "subtitle": "Eine kurze Geschichte der Überseestadt",
+            "src": "/data/audio/Einführung_1.mp3",
+            "type": "audio",
+            "length": 1,
+            "segments": [
+              {
+                "id": 0,
+                "start": 0,
+                "end": 43.0,
+                "target_id": 1
+              },
+              {
+                "id": 1,
+                "start": 43.0,
+                "end": 62.0,
+                "target_id": 2
+              },
+              {
+                "id": 2,
+                "start": 62.0,
+                "end": 224.0,
+                "target_id": 3
+              }
+            ]
+          },
+          {
+            "id": 1,
+            "title": "Das ehemalige Überseehafenbecken",
+            "subtitle": "Eine Bildergalerie zu den Veränderungen im Hafengebiet seit 1880",
+            "type": "gallery",
+            "target": "7f472575-10e3-4a6e-b77f-55dc849d121a"
+          },
+          {
+            "id": 2,
+            "title": "Entwicklung der Bremer Häfen",
+            "subtitle": "Veränderungen im Hafengebiet seit 1880",
+            "type": "map",
+            "target": "62eb9e16-0290-4c15-a1d5-44f753d21ed0"
+          },
+          {
+            "id": 3,
+            "title": "Europäische Expansion",
+            "subtitle": "Hier hast du die Möglichkeit, die Kolonisierung der Welt seit 1400 nachzuvollziehen",
+            "target": "7e854e4a-8334-11eb-8dcd-0242ac130003",
+            "src": "data/json/european_expansion_timeline.json",
+            "type": "timeline"
+          },
+          {
+            "id": 4,
+            "title": "Koloniale Spurensuche",
+            "subtitle": "Methodische Anmerkungen",
+            "src": "/data/audio/Einführung_2.mp3",
+            "type": "audio",
+            "length": 4
+          },
+          {
+            "id": 5,
+            "title": "Über uns",
+            "subtitle": "Wen meinen wir eigentlich mit „wir“ und „uns“? ",
+            "src": "/data/audio/Einführung_3.mp3",
+            "type": "audio",
+            "length": 4
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "uuid": "79352564-8334-11eb-8dcd-0242ac130003",
+      "common_name": "europahafenbecken",
+      "properties": {
+        "title": "Europahafenbecken",
+        "flyTo": true,
+        "uuid": "79352564-8334-11eb-8dcd-0242ac130003",
+        "description": "Am Beispiel des Europahafenbeckens geht es in dieser Station um koloniale Infrastrukturen, ihre Entwicklung und den Zusammenhang zwischen Wissenspoduktion und Kolonialismus."
+      },
+      "layers": [
+        {
+          "name": "route"
+        },
+        {
+          "name": "scenes"
+        }
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.76599, 53.09412]
+      },
+      "content": {
+        "id": 1,
+        "title": "Koloniale Infrastrukturen",
+        "image": "/data/images/europahafen_001.jpg",
+        "description": "Am Beispiel des Europahafenbeckens geht es in dieser Station um koloniale Infrastrukturen, ihre Entwicklung und den Zusammenhang zwischen Wissenspoduktion und Kolonialismus.",
+        "resources": [
+          {
+            "id": 0,
+            "title": "Die Weserkorrektion",
+            "subtitle": "So veränderte sich die Weser seit 1880",
+            "src": "/data/audio/Infrastrukturen_1.mp3",
+            "type": "audio",
+            "length": 1
+          },
+          {
+            "id": 1,
+            "title": "Der neue Flusslauf zwischen Bremen und Bremerhaven",
+            "subtitle": "Historische Planungsdokumente zeigen, wie sich die Weser mit der Korrektion verändert hat",
+            "type": "map",
+            "target": "d6973382-a4c2-473e-86dd-8ee9444328e2"
+          },
+          {
+            "id": 2,
+            "title": "Aktuelle Pegelstände",
+            "subtitle": "Auf Grundlage der Wasserstandsanzeige kannst du einschätzen, wie hoch das Wasser gerade steht.",
+            "type": "map",
+            "target": "8808cb18-8334-11eb-8dcd-0242ac130003"
+          },
+          {
+            "id": 3,
+            "title": "Transnationale und koloniale Bezüge",
+            "subtitle": "Die Geschichte der Weserkorrektion lässt sich kaum ohne transnationale und koloniale Bezüge erklären",
+            "src": "/data/audio/Infrastrukturen_2.mp3",
+            "type": "audio",
+            "length": 3
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "uuid": "d86f9abe-8334-11eb-8dcd-0242ac130003",
+      "common_name": "speicherXI",
+      "properties": {
+        "title": "Speicher XI",
+        "flyTo": true,
+        "uuid": "d86f9abe-8334-11eb-8dcd-0242ac130003",
+        "description": "Der Handel mit Baumwolle hat Bremer Kaufleuten und der Stadt Bremen zwischen 1800 und 1970 großen Reichtum verschafft. Dadurch steht Bremen bis heute in Beziehung mit kolonialen Ausbeutungsverhältnissen von Versklavung, kolonialer Zwangsarbeit bis zu neokolonialen Ausbeutungsverhältnissen."
+      },
+      "layers": [
+        {
+          "name": "route"
+        },
+        {
+          "name": "scenes"
+        },
+        {
+          "name": "speicherXI",
+          "source": "data/json/speicherXI.json",
+          "type": "PatternLayer",
+          "short": "speicherXI",
+          "selector": false
+        }
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.77157, 53.09634]
+      },
+      "content": {
+        "id": 2,
+        "title": "Baumwollhandel",
+        "image": "/data/images/speicher11_001.jpg",
+        "description": "Der Handel mit Baumwolle hat Bremer Kaufleuten und der Stadt Bremen zwischen 1800 und 1970 großen Reichtum verschafft. Dadurch steht Bremen bis heute in Beziehung mit kolonialen Ausbeutungsverhältnissen von Versklavung, kolonialer Zwangsarbeit bis zu neokolonialen Ausbeutungsverhältnissen.",
+        "resources": [
+          {
+            "id": 0,
+            "title": "Der Speicher XI",
+            "subtitle": "Ein Beispiel dafür, wie der Baumwollhandel die Infrastrukturen der Stadt geprägt hat",
+            "src": "/data/audio/Baumwolle_1.mp3",
+            "type": "audio",
+            "length": 1
+          },
+          {
+            "id": 1,
+            "title": "Baumwollhandel und die Entstehung des Hafens",
+            "subtitle": "Welchen Einfluss hatte der Baumwollhandel auf die Entstehung des Hafens?",
+            "src": "/data/audio/Baumwolle_2.mp3",
+            "type": "audio",
+            "length": 1
+          },
+          {
+            "id": 2,
+            "title": "Baumwolle in Bremen",
+            "subtitle": "Eine Bildergalrie, die zeigt, wo und wie in Bremen Baumwolle gehandelt wurde und wird",
+            "type": "gallery",
+            "target": "3f6cb982-8587-11eb-8dcd-0242ac130003"
+          },
+          {
+            "id": 3,
+            "title": "Baumwollhandel als Ausbeutungsverhältnis",
+            "subtitle": "Über die Baumwollproduktion durch versklavte Menschen und das deutsche Baumwollvolkskulturprojekt",
+            "src": "/data/audio/Baumwolle_3.mp3",
+            "type": "audio",
+            "length": 6
+          },
+          {
+            "id": 4,
+            "title": "„Baumwollvolkskulturprojekt“  in Togo",
+            "subtitle": "Arbeit als Erziehungsmaßnahme und wirtschaftliche Abhängigkeit",
+            "src": "/data/audio/Baumwolle_4.mp3",
+            "type": "audio",
+            "length": 2
+          },
+          {
+            "id": 5,
+            "title": "Und heute?",
+            "subtitle": "Baumwolle bleibt bis heute mit kolonialen Ungleichheiten verknüpft.",
+            "src": "/data/audio/Baumwolle_5.mp3",
+            "type": "audio",
+            "length": 3
+          },
+          {
+            "id": 6,
+            "title": "Baumwolle in Bremen und weltweit",
+            "subtitle": "Die Karte zeigt Orte, die mit dem (Bremer) Baumwollhandel in Beziehung stehen.",
+            "type": "map",
+            "target": "1ab4447e-8335-11eb-8dcd-0242ac130003"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "uuid": "4745a0a0-8335-11eb-8dcd-0242ac130003",
+      "common_name": "holz-und-fabrikenhafen",
+      "properties": {
+        "title": "Holz- und Fabrikenhafen",
+        "flyTo": true,
+        "uuid": "4745a0a0-8335-11eb-8dcd-0242ac130003",
+        "description": "Seit 1673 wird in Bremen Kaffee gehandelt und getrunken. Die verweist auf die lange koloniale Geschichte der Stadt, auch wenn im Stadtmarketing vor allem das Genussmittel im Vordergrund steht."
+      },
+      "layers": [
+        {
+          "name": "route"
+        },
+        {
+          "name": "scenes"
+        }
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.77362, 53.09818]
+      },
+      "content": {
+        "id": 3,
+        "title": "Kaffeehandel",
+        "image": "/data/images/fabrikenufer_001.jpg",
+        "description": "Seit 1673 wird in Bremen Kaffee gehandelt und getrunken. Die verweist auf die lange koloniale Geschichte der Stadt, auch wenn im Stadtmarketing vor allem das Genussmittel im Vordergrund steht.",
+        "resources": [
+          {
+            "id": 0,
+            "title": "Kaffee in der Überseestadt",
+            "subtitle": "Und, welche Bezüge zu Kaffee habt ihr entdeckt?",
+            "src": "/data/audio/Kaffee_1.mp3",
+            "type": "audio",
+            "length": 2
+          },
+          {
+            "id": 1,
+            "title": "Karte der Hauptanbaugebiete von Kaffee",
+            "subtitle": "Die meisten dieser Anbauländer waren einmal europäische Kolonien",
+            "type": "map",
+            "target": "75e49e48-8335-11eb-8dcd-0242ac130003"
+          },
+          {
+            "id": 2,
+            "title": "Kolonialer Kaffeehandel in Bremen",
+            "subtitle": "Wie Bremen zur Kaffeehandelsstadt wurde",
+            "src": "/data/audio/Kaffee_2.mp3",
+            "type": "audio",
+            "length": 1
+          },
+          {
+            "id": 3,
+            "title": "Unternehmensgründungen",
+            "subtitle": "Ereignisse in der Bremer Kaffee Branche ab 1892",
+            "target": "7affe3f9-08bc-4ae6-bde8-2e8816ba4f1b",
+            "src": "data/json/coffee_timeline.json",
+            "type": "timeline"
+          },
+          {
+            "id": 4,
+            "title": "Straßennamen mit Kaffeebezug",
+            "subtitle": "Die anschließende Karte zeigt Orte in Bremen, die einen Bezug zu Kaffeeproduktion und -handel haben.",
+            "src": "/data/audio/Kaffee_3.mp3",
+            "type": "audio",
+            "length": 4
+          },
+          {
+            "id": 5,
+            "title": "Kaffee in Bremen",
+            "subtitle": "Die Karte zeigt, welche Orte in Bremen einen Bezug zu Kaffeeproduktion und -handel haben.",
+            "type": "map",
+            "target": "8f4785da-8335-11eb-8dcd-0242ac130003"
+          },
+          {
+            "id": 6,
+            "title": "Globale Verflechtungen",
+            "subtitle": "Auswirkungen des Kaffeehandels auf die Produktionsländer",
+            "src": "/data/audio/Kaffee_4.mp3",
+            "type": "audio",
+            "length": 4
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "uuid": "98390290-8335-11eb-8dcd-0242ac130003",
+      "common_name": "wallerwied",
+      "properties": {
+        "title": "Waller Wied",
+        "flyTo": true,
+        "uuid": "98390290-8335-11eb-8dcd-0242ac130003",
+        "description": "In der Überseestadt, im benachbarten Walle und im Industriehafen gibt es viele Straßennamen, die in Beziehung zum Kolonialismus stehen und teilweise unkommentiert koloniales Unrecht ehren."
+      },
+      "layers": [
+        {
+          "name": "route"
+        },
+        {
+          "name": "scenes"
+        }
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.77477, 53.09397]
+      },
+      "content": {
+        "id": 4,
+        "title": "Koloniale Straßennamen",
+        "image": "/data/images/waller_wied_001.jpg",
+        "description": "In der Überseestadt, im benachbarten Walle und im Industriehafen gibt es viele Straßennamen, die in Beziehung zum Kolonialismus stehen und teilweise unkommentiert koloniales Unrecht ehren.",
+        "resources": [
+          {
+            "id": 0,
+            "title": "Straßenbenennungen",
+            "subtitle": "Viele Straßen in den (ehemaligen) Hafenarealen stehen in Zusammenhang mit dem deutschen Kolonialismus.",
+            "src": "/data/audio/Straßennamen_1.mp3",
+            "type": "audio",
+            "length": 9
+          },
+          {
+            "id": 1,
+            "title": "Straßen mit Kolonialbezug",
+            "subtitle": "Eine Karte mit weiteren Straßennamen und kurzen Infotexten darüber, wie sie in Beziehung zum Kolonialismus stehen.",
+            "type": "map",
+            "target": "c5b54012-8335-11eb-8dcd-0242ac130003"
+          },
+          {
+            "id": 2,
+            "title": "Straßen in Walle und in Gröpelingen",
+            "subtitle": "Handelsniederlassungen, 'Unterschutzstellung', Genozid.",
+            "src": "/data/audio/Straßennamen_2.mp3",
+            "type": "audio",
+            "length": 2
+          },
+          {
+            "id": 3,
+            "title": "Konsul-Smidt-Straße",
+            "subtitle": "Über die Verflechtung von Politik und Kaufmannschaft in den norddeutschen Hansestädten.",
+            "src": "/data/audio/Straßennamen_3.mp3",
+            "type": "audio",
+            "length": 2
+          },
+          {
+            "id": 4,
+            "title": "Der Fall Karl Peters",
+            "subtitle": "Vom Kolonialverbrecher zum Helden des NS",
+            "src": "/data/audio/Straßennamen_4.mp3",
+            "type": "audio",
+            "length": 2
+          }
+        ]
+      }
+    }
+  ]
+}
