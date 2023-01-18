@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "7f3c4712-f2c0-4af5-abda-422d359a953c",
+        "title": "Architecture",
+        "description": "Places that showcase architecture in Nantes, such as the Château des ducs de Bretagne, Notre-Dame Cathedral and Passage Pommeraye."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.553799, 47.218637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "32eba705-b835-4812-a3bc-8f46ecb21822",
+        "title": "Historic Sites",
+        "description": "Historic sites in Nantes, such as the Château des ducs de Bretagne and Place Royale."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.556588, 47.217722]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "934b5476-c4c1-468d-87d9-0b3803803fb4",
+        "title": "Museums and History",
+        "description": "Museums and historical sites in Nantes, such as the Musée d'Histoire de Nantes and the Cathédrale Saint-Pierre et Saint-Paul."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.555106, 47.216819]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "bb02de25-0172-4dc8-9772-7fa6ef02ac19",
+        "title": "Shopping and Entertainment",
+        "description": "Places for shopping and entertainment in Nantes, such as the Passage Pommeraye and Les Machines de l'île."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.56113, 47.211833]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "d4ef2c66-0518-4ed0-8a24-dcb3fa351a9e",
+        "title": "Outdoor Activities",
+        "description": "Places for outdoor activities in Nantes, such as the Parc des Tramways and the Parc des Chantiers."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.5727781, 47.206211]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "73a5610d-fc6e-40b8-84fb-b457483a47cb",
+        "title": "Art and Culture",
+        "description": "Places related to art and culture in Nantes, such as the Musée des Beaux-Arts and the Musée Jules Verne."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.579473, 47.2016344]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uuid": "17d11aef-e5b3-4e3f-8b66-6e958fd465ed",
+        "title": "Parks and Gardens",
+        "description": "Parks and gardens in Nantes, such as the Parc des Chantiers and the Jardin des Plantes."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.61179, 47.202797]
+      }
+    }
+  ]
+}

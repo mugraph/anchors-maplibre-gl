@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('./constants/color-palette.js');
+
 module.exports = {
   content: [
     './App.vue',
@@ -8,9 +11,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        shadow: 'hsl(0, 0, 0 / 26)',
-      },
+      colors: colors,
     },
   },
   plugins: [],

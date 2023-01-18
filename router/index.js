@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import MapLibreMap from '@/views/map/MapLibreMap.vue';
 import LeafletMap from '@/views/map/LeafletMap.vue';
 import MapTest from '@/views/map/MapTest.vue';
+import SvgNumberGrid from '@/views/SvgNumberGrid.vue';
 
 import { useMapStore } from '../stores/map';
 
@@ -14,7 +15,7 @@ const routes = [
     component: Home,
     children: [
       {
-        path: 'maplibre/:zoom/:lat/:lng',
+        path: ':tour_name?/:chapter_name?/:zoom/:lat/:lng',
         name: 'maplibre',
         component: MapLibreMap,
       },
@@ -28,6 +29,12 @@ const routes = [
         name: 'maptest',
         component: MapTest,
       },
+      {
+        path: 'svgnumbers',
+        name: 'svgnumbers',
+        component: SvgNumberGrid,
+        props: true,
+      },
     ],
   },
 ];
@@ -37,9 +44,14 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async () => {
+router.beforeEach(async (to) => {
   const mapStore = useMapStore();
   mapStore.resetTime();
+  // HACK: find a better way
+  // to.query.deferFlyTo is of type 'string'
+  if (to.query.deferFlyTo === 'true') {
+    mapStore.setIsFlyTo(false);
+  }
   return true;
 });
 

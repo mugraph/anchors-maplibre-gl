@@ -26,3 +26,17 @@ export const findClosest = (array, goal) => {
     return Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev;
   });
 };
+
+export const isPrime = (number) => {
+  for (let i = 2, s = Math.sqrt(number); i <= s; i++) {
+    if (number % i === 0) return false;
+  }
+  return number > 1;
+};
+
+export const toFeatureCollection = (array) => {
+  return {
+    type: 'FeatureCollection',
+    features: [...array],
+  };
+};
