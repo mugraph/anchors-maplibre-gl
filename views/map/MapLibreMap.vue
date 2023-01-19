@@ -7,11 +7,11 @@
       v-for="(feature, index) in mapStore.chapters.features"
       :number="index + 1"
       :size="32"
-      :fgColor="'white'"
+      :fgColor="'black'"
       :bgColor="
-        feature.properties.uuid === mapStore.featureUUID ? '#843B62' : '#555257'
+        feature.properties.uuid === mapStore.featureUUID ? '#843B62' : '#fafafa'
       "
-      :key="index"
+      :key="svgKey + index"
       :ref="
         (el) => {
           svgs.push(el);
@@ -30,6 +30,7 @@
     :zoom="options.zoom"
     @map:load="onLoad"
     @map:moveend="replaceRouterParams"
+    @map:click="onMapclick"
   >
     >
     <mgl-navigation-control />
@@ -42,11 +43,11 @@
         layer-id="bounds"
         :paint="boundsPaint"
         @click="onClick"
+        @keyup.enter="onClick"
         @mouseenter="onMouseEnter"
         @focusin="onMouseEnter"
         @mouseleave="onMouseLeave"
         @focusout="onMouseLeave"
-        @keyup.enter="onClick"
       />
     </mgl-geo-json-source>
   </mgl-map>
@@ -66,8 +67,9 @@ import {
   useMap,
 } from '@/plugins/vue-maplibre-gl/vue-maplibre-gl.esm.js';
 import maplibregl from 'maplibre-gl';
+import { MapLibreOptions } from '@/types/MapLibreOptions';
 import { useMapStore } from '../../stores/map';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
 import { nextTick } from 'vue';
 
 MglDefaults.style =
@@ -76,6 +78,7 @@ MglDefaults.style =
 
 const mapRef = useMap();
 const svgs = ref([]);
+const svgKey = ref(0);
 
 const mapStore = useMapStore();
 const showMap = ref(true);
@@ -84,10 +87,9 @@ const route = useRoute();
 
 const markers = [];
 
-const options = reactive({
-  controlPosition: ref('top-left'),
+const options: MapLibreOptions = reactive({
   center: route.params
-    ? [route.params.lng, route.params.lat]
+    ? [Number(route.params.lng), Number(route.params.lat)]
     : [10.288107, 49.405078],
   zoom: 14,
 });
@@ -148,6 +150,9 @@ const onLoad = () => {
     addMarkers();
   }
 };
+const onMapclick = (e) => {
+  console.log(JSON.stringify([e.event.lngLat.lng, e.event.lngLat.lat]));
+};
 
 const chapter_name = computed(() => {
   if (mapStore.chapterUUID && mapStore.chapters)
@@ -204,6 +209,8 @@ const flyTo = (center: number[], zoom: number | null) => {
 };
 
 const onClick = (e) => {
+  console.log(e);
+
   mapStore.setFeatureUUID(e.features[0].properties.uuid);
   // HACK: Chapter UUID is fetched from API based on properties uuid
   mapStore.setChapterUUID(e.features[0].properties.uuid);
@@ -227,6 +234,10 @@ const onMouseLeave = () => {
   mapRef.map.getCanvas().style.cursor = '';
 };
 
+const forceRerender = () => {
+  svgs.value.length = 0;
+};
+
 watch(
   () => route.params,
   (v) => {
@@ -242,27 +253,23 @@ watch(
 );
 
 watch(
-  () => mapStore.tourUUID,
-  (v) => {
-    if (v === null) {
-      console.log('tour id:', mapStore.tourUUID);
+  () => mapStore.chapters,
+  (v, old) => {
+    // Force SVG rerender if number of chapters changes
+    if (old && v.features.length !== old.features.length) {
+      forceRerender();
+    }
+    if (old !== null) {
+      nextTick(() => {
+        addMarkers();
+      });
     }
   }
 );
 
 watch(
-  () => mapStore.chapters,
-  (v, old) => {
-    if (old !== null)
-      nextTick(() => {
-        addMarkers();
-      });
-  }
-);
-
-watch(
   () => mapStore.chapterUUID,
-  (v) => {
+  () => {
     replaceRouterParams();
   }
 );

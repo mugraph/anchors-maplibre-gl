@@ -20,7 +20,7 @@
       <RouterLink
         :to="{
           name: 'maplibre',
-          params: { zoom: 14, lat: 47.218, lng: -1.553 },
+          params: { tour_name: 'nantes', zoom: 14, lat: 47.218, lng: -1.553 },
         }"
       >
         Maplibre

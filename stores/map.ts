@@ -1,3 +1,4 @@
+import { RouteParams } from './types/RouteParams';
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { toFeatureCollection } from '../helpers/util';
@@ -11,20 +12,20 @@ export const useMapStore = defineStore('mapStore', {
   state: () => {
     return {
       time: new Date().getTime(),
-      loadedTime: null,
-      isReady: false,
-      center: [8.7707, 53.095],
-      tourUUID: null,
-      featureUUID: null,
-      chapterUUID: null,
+      loadedTime: null as number,
+      isReady: false as boolean,
+      center: [8.7707, 53.095] as [number, number],
+      tourUUID: null as string,
+      featureUUID: null as string,
+      chapterUUID: null as string,
       tours: null,
       chapters: null,
       path: null,
-      isFlyTo: true,
+      isFlyTo: true as boolean,
     };
   },
   actions: {
-    setIsReady(payload) {
+    setIsReady(payload: boolean) {
       this.isReady = payload;
       this.loadedTime = new Date().getTime();
     },
@@ -32,33 +33,33 @@ export const useMapStore = defineStore('mapStore', {
       this.loadedTime = null;
       this.time = new Date().getTime();
     },
-    setTourUUID(payload) {
+    setTourUUID(payload: string) {
       this.tourUUID = payload;
     },
-    setFeatureUUID(payload) {
+    setFeatureUUID(payload: string) {
       this.featureUUID = payload;
     },
-    setIsFlyTo(payload) {
+    setIsFlyTo(payload: boolean) {
       this.isFlyTo = payload;
     },
-    async fetchTours(routeParams) {
+    async fetchTours(params: RouteParams) {
       this.isReady = false;
       try {
         const resp = await axios.get('http://localhost:8080/tours');
         this.tours = resp.data;
-        this.resolveTourUUID(routeParams);
+        this.resolveTourUUID(params);
         this.isReady = true;
       } catch (error) {
         console.log(error);
       }
     },
-    resolveTourUUID(routeParams) {
+    resolveTourUUID(params: RouteParams) {
       if (this.tours)
         this.tourUUID = this.tours.features.find(
-          (e) => e.common_name === routeParams.tour_name
+          (e) => e.common_name === params.tour_name
         ).uuid;
     },
-    async fetchChapters(uuid) {
+    async fetchChapters(uuid: string) {
       try {
         const resp = await axios.get('http://localhost:8080/tour/' + uuid);
         this.chapters = toFeatureCollection(resp.data.chapters);
@@ -67,9 +68,9 @@ export const useMapStore = defineStore('mapStore', {
         console.log(error);
       }
     },
-    async setChapterUUID(payload) {
+    async setChapterUUID(uuid: string) {
       try {
-        const resp = await axios.get('http://localhost:8080/parent/' + payload);
+        const resp = await axios.get('http://localhost:8080/parent/' + uuid);
         this.chapterUUID = resp.data.uuid;
       } catch (error) {
         console.log(error);
@@ -80,10 +81,10 @@ export const useMapStore = defineStore('mapStore', {
         coordinates: [
           ...this.chapters.features.map((e) => e.geometry.coordinates),
         ],
-        profile: 'foot-hiking',
+        profile: 'foot-walking',
         format: 'geojson',
         options: {
-          profile_params: { weightings: { green: 1, quiet: 1 } },
+          profile_params: { weightings: { green: 0.8, quiet: 0.4 } },
         },
       })
         .then((json) => {

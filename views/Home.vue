@@ -61,7 +61,7 @@ const navHeight = ref(54);
 const mapStore = useMapStore();
 const snap = useBottomSheetStore();
 
-const setActive = (v) => {
+const setActive = (v: number) => {
   snap.setActive(v);
 };
 </script>

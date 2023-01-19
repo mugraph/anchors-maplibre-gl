@@ -171,8 +171,4 @@ const realDigits = str.map(Number);
 defineExpose({
   svgRef,
 });
-
-onMounted(() => {
-  // console.log(svgRef.value);
-});
 </script>

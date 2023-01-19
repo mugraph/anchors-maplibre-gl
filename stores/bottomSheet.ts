@@ -7,7 +7,7 @@ export const useBottomSheetStore = defineStore('snap', {
     };
   },
   actions: {
-    setActive(payload) {
+    setActive(payload: number) {
       this.active = payload;
     },
   },

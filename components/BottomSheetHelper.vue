@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 const props = defineProps([
   'wrapperHeight',
@@ -63,7 +63,7 @@ const props = defineProps([
 ]);
 
 const breakPoints = computed(() => {
-  let points = [];
+  const points = [];
   for (let i = 0; i <= props.snapHeights.length - 2; i++) {
     if (i === props.snapHeights.length - 2)
       points.push((props.wrapperHeight + props.snapHeights[i]) / 2);

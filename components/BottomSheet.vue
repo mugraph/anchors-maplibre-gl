@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { debounce, findClosest, elScrolledTop } from '@/helpers/util';
 import { useDrag } from '@vueuse/gesture';
@@ -82,7 +82,7 @@ const getContentOverflow = computed(() =>
 );
 
 const { motionProperties } = useMotionProperties(sheetRef);
-const { push } = useMotionTransitions(motionProperties);
+const { push } = useMotionTransitions();
 
 const spring = {
   type: 'spring',
@@ -170,16 +170,16 @@ function handleDragEnd(ctx) {
   const targetIndex = snapHeights.value.indexOf(targetHeight);
 
   if (targetIndex === snap.active) {
-    moveSheet(undefined);
+    moveSheet(null);
   } else {
     snap.setActive(targetIndex);
   }
 }
 
-function moveSheet(v) {
+function moveSheet(v: number | null) {
   if (v > wrapperHeight.value) return;
   const mP = motionProperties;
-  if (!v || v === undefined) v = sheetHeight.value;
+  if (!v) v = sheetHeight.value;
 
   push('y', -v, mP, spring);
   push('height', v, mP, spring);
@@ -209,7 +209,7 @@ useDrag(dragHandler, {
 watch(
   () => snap.active,
   () => {
-    moveSheet(undefined);
+    moveSheet(null);
     sheetContentRef.value.scroll({ top: 0, behavior: 'smooth' });
   }
 );
