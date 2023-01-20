@@ -34,9 +34,18 @@ export const isPrime = (number: number) => {
 };
 
 // NOTE: Decide on whether to write type interface for data returned by API
-export const toFeatureCollection = (array) => {
-  return {
-    type: 'FeatureCollection',
-    features: [...array],
-  };
+// 2023-01-20: Added @types/geosjon
+export const toFeatureCollection = (array, bbox: number[]) => {
+  if (!bbox) {
+    return {
+      type: 'FeatureCollection',
+      features: [...array],
+    };
+  } else {
+    return {
+      type: 'FeatureCollection',
+      bbox: bbox,
+      features: [...array],
+    };
+  }
 };

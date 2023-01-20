@@ -15,7 +15,7 @@ const routes = [
     component: Home,
     children: [
       {
-        path: ':tour_name?/:chapter_name?/:zoom/:lat/:lng',
+        path: ':tour_name?/:zoom/:lat/:lng',
         name: 'maplibre',
         component: MapLibreMap,
       },
@@ -44,14 +44,13 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to) => {
+router.beforeEach(async (to, from) => {
   const mapStore = useMapStore();
-  mapStore.resetTime();
-  // HACK: find a better way
-  // to.query.deferFlyTo is of type 'string'
-  if (to.query.deferFlyTo === 'true') {
-    mapStore.setIsFlyTo(false);
+  if (to.query.id) {
+    mapStore.setTourId(to.query.id);
+    await mapStore.fetchSingleTour(to.query.id);
   }
+  mapStore.resetTime();
   return true;
 });
 

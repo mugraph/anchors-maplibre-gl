@@ -56,14 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  reactive,
-  ref,
-  watch,
-  computed,
-  onBeforeUnmount,
-  onMounted,
-} from 'vue';
+import { reactive, ref, watch, onBeforeUnmount, onMounted } from 'vue';
 import {
   MglDefaults,
   useMap,
@@ -93,7 +86,7 @@ const options: MapLibreOptions = reactive({
   center: route.params
     ? [Number(route.params.lng), Number(route.params.lat)]
     : [10.288107, 49.405078],
-  zoom: 14,
+  zoom: route.params ? Number(route.params.zoom) : 14,
 });
 
 const pathPaint = reactive({
@@ -111,14 +104,11 @@ const boundsPaint = reactive({
 });
 
 onMounted(() => {
-  mapStore.fetchTours(route.params);
-  wait();
-  function wait() {
-    if (!mapStore.tours) {
-      setTimeout(wait, 100);
-    } else {
-      mapStore.fetchSingleTour(mapStore.tourId);
-    }
+  load();
+  async function load() {
+    await mapStore.fetchTours(route.params);
+    await mapStore.fetchSingleTour(mapStore.tourId);
+    moveMap();
   }
 });
 
@@ -136,11 +126,6 @@ const addMarkers = () => {
       e.stopPropagation();
       if (e.key === 'Enter') onEnter(el);
     });
-    // NOTE: Decide if this is intended behavior
-    // marker._element.addEventListener('focusin', () => {
-    //   mapStore.setIsFlyTo(false);
-    //   moveMap(lngLat, null);
-    // });
     markers.push(marker);
   });
 };
@@ -155,17 +140,9 @@ const onMapclick = (e) => {
   console.log(JSON.stringify([e.event.lngLat.lng, e.event.lngLat.lat]));
 };
 
-const chapter_name = computed(() => {
-  if (mapStore.chapterId && mapStore.chapters)
-    return mapStore.chapters.features.find((e) => e.id === mapStore.chapterId)
-      .common_name;
-  else return null;
-});
-
 // Replace route map replaceRouterParams
 const replaceRouterParams = () => {
   const params = {
-    chapter_name: chapter_name.value,
     lat: Number(mapRef.map.getCenter().lat.toFixed(3)),
     lng: Number(mapRef.map.getCenter().lng.toFixed(3)),
     zoom: Number(mapRef.map.getZoom().toFixed(1)),
@@ -173,20 +150,10 @@ const replaceRouterParams = () => {
   router.replace({ params: params });
 };
 
-// If isFlyTo is true, fly to new location (and zoom)
-// Otherwise set new center (and)
-const moveMap = (center: number[], zoom: number | null) => {
-  if (mapStore.isFlyTo === true) flyTo(center, zoom);
-  else {
-    const z =
-      zoom === null
-        ? mapRef.map.getZoom()
-          ? Number(mapRef.map.getZoom().toFixed(1))
-          : options.zoom
-        : zoom;
-    mapRef.map.setCenter(center);
-    mapRef.map.setZoom(z);
-    mapStore.setIsFlyTo(true);
+// Fit bounding box or set new center (and)
+const moveMap = () => {
+  if (mapStore.tour.bbox) {
+    mapRef.map.fitBounds(mapStore.tour.bbox, { animate: true, padding: 60 });
   }
 };
 
@@ -211,13 +178,13 @@ const flyTo = (center: number[], zoom: number | null) => {
 const onClick = (e) => {
   mapStore.setChapterId(e.features[0].properties.id);
   const center = e.features[0].geometry.coordinates.slice();
-  moveMap(center, null);
+  flyTo(center, null);
 };
 
 const onEnter = (e) => {
   mapStore.setChapterId(e.properties.id);
   const center = e.geometry.coordinates.slice();
-  moveMap(center, null);
+  flyTo(center, null);
 };
 
 const onMouseEnter = () => {
@@ -241,7 +208,7 @@ watch(
           Number(v.lng) !== Number(mapRef.map.getCenter().lng.toFixed(3)) ||
           Number(v.lat) !== Number(mapRef.map.getCenter().lat.toFixed(3))
         )
-          moveMap([Number(v.lng), Number(v.lat)], Number(v.zoom));
+          moveMap();
     });
   }
 );

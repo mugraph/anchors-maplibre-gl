@@ -20,13 +20,13 @@ module.exports = {
   },
   ignorePatterns: ['**/plugins/*'],
   rules: {
-    'no-undef: 'off',
+    'no-undef': 'off',
     quotes: ['error', 'single'],
     'vue/component-name-in-template-casing': ['error', 'PascalCase'],
     'vue/component-tags-order': [
       'error',
       {
-        order: ['script', 'template', 'style'],
+        order: ['template', 'script', 'style'],
       },
     ],
     'vue/multi-word-component-names': 'off',

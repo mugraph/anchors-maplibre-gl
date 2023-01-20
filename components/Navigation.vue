@@ -85,20 +85,16 @@
       v-for="tour in mapStore.tours.features"
       :key="tour.id"
       class="bg-white rounded ring-2 ring-black/25 px-3 py-1 mx-1"
-      @click="changeTour(tour.id)"
       :to="{
         name: 'maplibre',
         params: {
           tour_name: tour.properties.common_name,
-          chapter_name: null,
           zoom: 14,
           lat: Number(tour.geometry.coordinates[1].toFixed(3)),
           lng: Number(tour.geometry.coordinates[0].toFixed(3)),
         },
-        // HACK: find a better way
-        // to.query.deferFlyTo is of type 'string'
         query: {
-          deferFlyTo: 'true',
+          id: tour.id,
         },
       }"
     >
@@ -127,12 +123,6 @@ const numSize = reactive({
 });
 
 const interval = ref();
-
-const changeTour = (id) => {
-  mapStore.setTourId(id);
-  mapStore.fetchSingleTour(id);
-  //mapStore.fetchPath(id);
-};
 
 const setActive = (v) => {
   snap.setActive(v);

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { RouteParams } from '@/types/RouteParams';
+import * as GeoJSON from 'geojson';
 import { toFeatureCollection } from '@/helpers/util';
 import axios from 'axios';
 import Openrouteservice from 'openrouteservice-js';
@@ -14,13 +15,13 @@ export const useMapStore = defineStore('mapStore', {
       center: [8.7707, 53.095] as [number, number],
       chapterId: null as string,
       chapters: null,
-      isFlyTo: true as boolean,
       isReady: false as boolean,
       loadedTime: null as number,
-      path: null,
+      path: null as GeoJSON.FeatureCollection,
       time: new Date().getTime(),
+      tour: null as GeoJSON.FeatureCollection,
       tourId: null as string,
-      tours: null,
+      tours: null as GeoJSON.FeatureCollection,
     };
   },
   actions: {
@@ -34,9 +35,6 @@ export const useMapStore = defineStore('mapStore', {
     },
     setTourId(payload: string) {
       this.tourId = payload;
-    },
-    setIsFlyTo(payload: boolean) {
-      this.isFlyTo = payload;
     },
     async fetchTours(params: RouteParams) {
       this.isReady = false;
@@ -58,8 +56,11 @@ export const useMapStore = defineStore('mapStore', {
     async fetchSingleTour(id: string) {
       try {
         const resp = await axios.get('http://localhost:8080/tour/' + id);
-        this.tour = toFeatureCollection(resp.data.features.slice(0, 1));
-        this.chapters = toFeatureCollection(resp.data.features.slice(1));
+        this.tour = toFeatureCollection(
+          resp.data.features.slice(0, 1),
+          resp.data.bbox
+        );
+        this.chapters = toFeatureCollection(resp.data.features.slice(1), null);
         this.fetchPath();
       } catch (error) {
         console.log(error);
