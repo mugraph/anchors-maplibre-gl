@@ -78,18 +78,18 @@
   </nav>
   <nav
     v-if="route.name === 'maplibre' && mapStore.tours"
-    class="flex items-center p-2 bg-indigo-200"
+    class="fixed flex items-center mx-1 top-0 z-[1002]"
     :style="[{ 'min-height': navHeight + 'px' }]"
   >
     <RouterLink
       v-for="tour in mapStore.tours.features"
       :key="tour.id"
-      class="mx-1 bg-zinc-100"
+      class="bg-white rounded ring-2 ring-black/25 px-3 py-1 mx-1"
       @click="changeTour(tour.id)"
       :to="{
         name: 'maplibre',
         params: {
-          tour_name: tour.common_name,
+          tour_name: tour.properties.common_name,
           chapter_name: null,
           zoom: 14,
           lat: Number(tour.geometry.coordinates[1].toFixed(3)),

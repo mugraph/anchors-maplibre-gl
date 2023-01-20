@@ -52,7 +52,7 @@ export const useMapStore = defineStore('mapStore', {
     resolveTourId(params: RouteParams) {
       if (this.tours)
         this.tourId = this.tours.features.find(
-          (e) => e.common_name === params.tour_name
+          (e) => e.properties.common_name === params.tour_name
         ).id;
     },
     async fetchSingleTour(id: string) {
