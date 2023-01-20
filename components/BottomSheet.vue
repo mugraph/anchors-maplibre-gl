@@ -37,10 +37,7 @@ const isDragging = ref(false);
 const velocity = ref(1);
 
 const props = defineProps({
-  topOffset: {
-    Type: Number,
-    default: 54,
-  },
+  topOffset: { type: Number, default: 54 },
   duration: {
     type: Number,
     default: 400,

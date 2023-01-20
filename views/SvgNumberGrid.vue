@@ -5,8 +5,8 @@
       :number="index"
       :size="numSize.count"
       :key="index"
-      :fgColor="'white'"
-      :bgColor="isPrime(index) ? colors.red[500] : colors.emerald[600]"
+      :fg-color="'white'"
+      :bg-color="isPrime(index) ? colors.red[500] : colors.emerald[600]"
     />
   </div>
 </template>

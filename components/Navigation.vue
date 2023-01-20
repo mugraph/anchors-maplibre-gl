@@ -32,7 +32,7 @@
     <span v-if="mapStore.loadedTime" class="pl-4 text-sm">
       {{ `${mapStore.loadedTime - mapStore.time}ms` }}
     </span>
-    <span>{{ mapStore.chapterUUID }}</span>
+    <span>{{ mapStore.chapterId }}</span>
     <div v-if="route.name === 'svgnumbers'">
       <span class="px-2">Length:</span>
       <input class="w-24 px-2 w-fit" v-model="arrLength.count" />
@@ -83,9 +83,9 @@
   >
     <RouterLink
       v-for="tour in mapStore.tours.features"
-      :key="tour.uuid"
+      :key="tour.id"
       class="mx-1 bg-zinc-100"
-      @click="changeTour(tour.uuid)"
+      @click="changeTour(tour.id)"
       :to="{
         name: 'maplibre',
         params: {
@@ -113,7 +113,7 @@ import { useBottomSheetStore } from '../stores/bottomSheet';
 import { useMapStore } from '../stores/map';
 import { useRoute } from 'vue-router';
 
-defineProps(['navHeight']);
+defineProps({ navHeight: { type: Number, default: 54 } });
 
 const mapStore = useMapStore();
 const snap = useBottomSheetStore();
@@ -128,10 +128,10 @@ const numSize = reactive({
 
 const interval = ref();
 
-const changeTour = (uuid) => {
-  mapStore.setTourUUID(uuid);
-  mapStore.fetchChapters(uuid);
-  //mapStore.fetchPath(uuid);
+const changeTour = (id) => {
+  mapStore.setTourId(id);
+  mapStore.fetchSingleTour(id);
+  //mapStore.fetchPath(id);
 };
 
 const setActive = (v) => {

@@ -1,9 +1,9 @@
 <template>
-  <Navigation :navHeight="navHeight" />
+  <Navigation :nav-height="navHeight" />
   <div class="flex-grow w-full">
     <RouterView />
     <!-- <RouterView :numSize="numSize" :arrLength="arrLength" /> -->
-    <BottomSheet :topOffset="navHeight">
+    <BottomSheet :top-offset="navHeight">
       <ul>
         <li v-for="i in 18" :key="i">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid,

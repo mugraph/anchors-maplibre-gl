@@ -1,6 +1,6 @@
 import { LngLatLike } from 'maplibre-gl';
 
-interface MapLibreOptions {
+export interface MapLibreOptions {
   center: LngLatLike;
   zoom: number;
 }

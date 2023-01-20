@@ -8,7 +8,7 @@ module.exports = {
   },
   plugins: ['prettier', 'vuejs-accessibility'],
   extends: [
-    'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-strongly-recommended',
     'eslint:recommended',
     '@vue/eslint-config-prettier',
     'prettier',
@@ -18,10 +18,17 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  ignorePatterns: ['**/plugins/*'],
   rules: {
+    'no-undef: 'off',
     quotes: ['error', 'single'],
-    'no-undef': 'off',
-    'vue/multi-word-component-names': 'off',
     'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/component-tags-order': [
+      'error',
+      {
+        order: ['script', 'template', 'style'],
+      },
+    ],
+    'vue/multi-word-component-names': 'off',
   },
 };

@@ -12,8 +12,8 @@
         :digit="digits.bg[0]"
         :style="'bg'"
         :size="size"
-        :fgColor="fgColor"
-        :bgColor="bgColor"
+        :fg-color="fgColor"
+        :bg-color="bgColor"
       />
       <!-- equals 3 digits -->
       <g
@@ -27,8 +27,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <g v-else transform="translate(-3.5, 0)">
@@ -36,8 +36,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
           </g>
@@ -48,8 +48,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <!-- first digit was not 1  -->
@@ -58,8 +58,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
           </g>
@@ -69,8 +69,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <g v-else-if="realDigits[i - 2] === 1" transform="translate(10, 0)">
@@ -78,8 +78,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <g v-else transform="translate(11, 0)">
@@ -87,8 +87,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
           </g>
@@ -102,8 +102,8 @@
               :digit="digits.fg[d]"
               :style="'fg'"
               :size="size"
-              :fgColor="fgColor"
-              :bgColor="bgColor"
+              :fg-color="fgColor"
+              :bg-color="bgColor"
             />
           </g>
           <g v-else-if="i === 0">
@@ -112,8 +112,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <g v-else transform="translate(-3.5, 0)">
@@ -121,8 +121,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
           </g>
@@ -132,8 +132,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
             <g v-else transform="translate(3.5, 0)">
@@ -141,8 +141,8 @@
                 :digit="digits.fg[d]"
                 :style="'fg'"
                 :size="size"
-                :fgColor="fgColor"
-                :bgColor="bgColor"
+                :fg-color="fgColor"
+                :bg-color="bgColor"
               />
             </g>
           </g>
@@ -153,7 +153,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import * as digits from '../assets/digits.json';
 const props = defineProps([
   'number',

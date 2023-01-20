@@ -1,7 +1,7 @@
-import { RouteParams } from './types/RouteParams';
 import { defineStore } from 'pinia';
+import { RouteParams } from '@/types/RouteParams';
+import { toFeatureCollection } from '@/helpers/util';
 import axios from 'axios';
-import { toFeatureCollection } from '../helpers/util';
 import Openrouteservice from 'openrouteservice-js';
 
 const Directions = new Openrouteservice.Directions({
@@ -11,17 +11,16 @@ const Directions = new Openrouteservice.Directions({
 export const useMapStore = defineStore('mapStore', {
   state: () => {
     return {
-      time: new Date().getTime(),
-      loadedTime: null as number,
-      isReady: false as boolean,
       center: [8.7707, 53.095] as [number, number],
-      tourUUID: null as string,
-      featureUUID: null as string,
-      chapterUUID: null as string,
-      tours: null,
+      chapterId: null as string,
       chapters: null,
-      path: null,
       isFlyTo: true as boolean,
+      isReady: false as boolean,
+      loadedTime: null as number,
+      path: null,
+      time: new Date().getTime(),
+      tourId: null as string,
+      tours: null,
     };
   },
   actions: {
@@ -33,11 +32,8 @@ export const useMapStore = defineStore('mapStore', {
       this.loadedTime = null;
       this.time = new Date().getTime();
     },
-    setTourUUID(payload: string) {
-      this.tourUUID = payload;
-    },
-    setFeatureUUID(payload: string) {
-      this.featureUUID = payload;
+    setTourId(payload: string) {
+      this.tourId = payload;
     },
     setIsFlyTo(payload: boolean) {
       this.isFlyTo = payload;
@@ -47,34 +43,30 @@ export const useMapStore = defineStore('mapStore', {
       try {
         const resp = await axios.get('http://localhost:8080/tours');
         this.tours = resp.data;
-        this.resolveTourUUID(params);
+        this.resolveTourId(params);
         this.isReady = true;
       } catch (error) {
         console.log(error);
       }
     },
-    resolveTourUUID(params: RouteParams) {
+    resolveTourId(params: RouteParams) {
       if (this.tours)
-        this.tourUUID = this.tours.features.find(
+        this.tourId = this.tours.features.find(
           (e) => e.common_name === params.tour_name
-        ).uuid;
+        ).id;
     },
-    async fetchChapters(uuid: string) {
+    async fetchSingleTour(id: string) {
       try {
-        const resp = await axios.get('http://localhost:8080/tour/' + uuid);
-        this.chapters = toFeatureCollection(resp.data.chapters);
+        const resp = await axios.get('http://localhost:8080/tour/' + id);
+        this.tour = toFeatureCollection(resp.data.features.slice(0, 1));
+        this.chapters = toFeatureCollection(resp.data.features.slice(1));
         this.fetchPath();
       } catch (error) {
         console.log(error);
       }
     },
-    async setChapterUUID(uuid: string) {
-      try {
-        const resp = await axios.get('http://localhost:8080/parent/' + uuid);
-        this.chapterUUID = resp.data.uuid;
-      } catch (error) {
-        console.log(error);
-      }
+    setChapterId(id: string) {
+      this.chapterId = id;
     },
     async fetchPath() {
       Directions.calculate({

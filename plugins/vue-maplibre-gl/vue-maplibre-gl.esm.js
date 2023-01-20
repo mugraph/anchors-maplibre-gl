@@ -984,7 +984,7 @@ const je = ["animate", "coordinates", "canvas"], Fe = f({
     clusterProperties: Object,
     lineMetrics: Boolean,
     generateId: Boolean,
-    promoteId: Object,
+    promoteId: [Object, String],
     filter: [Array, String, Object]
   },
   setup(e) {
@@ -1080,7 +1080,7 @@ const je = ["animate", "coordinates", "canvas"], Fe = f({
     minzoom: Number,
     maxzoom: Number,
     attribution: String,
-    promoteId: Object
+    promoteId: [Object, String]
   },
   setup(e) {
     const t = n(y), o = n(b), a = n(_), r = n(M), i = C(r, e.sourceId), l = new W();

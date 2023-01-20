@@ -6,9 +6,9 @@
     :max-zoom="mapOptions.maxZoom"
     :center="[mapStore.center[1], mapStore.center[0]]"
     :options="mapOptions"
-    :zoomAnimation="true"
+    :zoom-animation="true"
     @ready="onReady"
-    :useGlobalLeaflet="false"
+    :use-global-leaflet="false"
   >
     <LTileLayer
       ref="baseLayer"

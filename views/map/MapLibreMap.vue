@@ -7,10 +7,8 @@
       v-for="(feature, index) in mapStore.chapters.features"
       :number="index + 1"
       :size="32"
-      :fgColor="'black'"
-      :bgColor="
-        feature.properties.uuid === mapStore.featureUUID ? '#843B62' : '#fafafa'
-      "
+      :fg-color="feature.id === mapStore.chapterId ? 'white' : 'black'"
+      :bg-color="feature.id === mapStore.chapterId ? '#843B62' : '#fafafa'"
       :key="svgKey + index"
       :ref="
         (el) => {
@@ -38,7 +36,11 @@
     <mgl-geo-json-source source-id="path" :data="mapStore.path">
       <mgl-line-layer layer-id="path" :paint="pathPaint" />
     </mgl-geo-json-source>
-    <mgl-geo-json-source source-id="bounds" :data="mapStore.chapters">
+    <mgl-geo-json-source
+      source-id="bounds"
+      :data="mapStore.chapters"
+      promote-id="id"
+    >
       <mgl-circle-layer
         layer-id="bounds"
         :paint="boundsPaint"
@@ -69,7 +71,7 @@ import {
 import maplibregl from 'maplibre-gl';
 import { MapLibreOptions } from '@/types/MapLibreOptions';
 import { useMapStore } from '../../stores/map';
-import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { nextTick } from 'vue';
 
 MglDefaults.style =
@@ -100,12 +102,12 @@ const pathPaint = reactive({
 });
 
 const boundsPaint = reactive({
-  'circle-stroke-width': 1,
-  'circle-stroke-color': '#262240',
   'circle-color': '#726f8c',
-  'circle-radius': 25,
   'circle-opacity': 0.2,
+  'circle-radius': 25,
+  'circle-stroke-color': '#262240',
   'circle-stroke-opacity': 0.15,
+  'circle-stroke-width': 1,
 });
 
 onMounted(() => {
@@ -115,7 +117,7 @@ onMounted(() => {
     if (!mapStore.tours) {
       setTimeout(wait, 100);
     } else {
-      mapStore.fetchChapters(mapStore.tourUUID);
+      mapStore.fetchSingleTour(mapStore.tourId);
     }
   }
 });
@@ -139,7 +141,6 @@ const addMarkers = () => {
     //   mapStore.setIsFlyTo(false);
     //   moveMap(lngLat, null);
     // });
-
     markers.push(marker);
   });
 };
@@ -155,10 +156,9 @@ const onMapclick = (e) => {
 };
 
 const chapter_name = computed(() => {
-  if (mapStore.chapterUUID && mapStore.chapters)
-    return mapStore.chapters.features.find(
-      (e) => e.uuid === mapStore.chapterUUID
-    ).common_name;
+  if (mapStore.chapterId && mapStore.chapters)
+    return mapStore.chapters.features.find((e) => e.id === mapStore.chapterId)
+      .common_name;
   else return null;
 });
 
@@ -166,9 +166,9 @@ const chapter_name = computed(() => {
 const replaceRouterParams = () => {
   const params = {
     chapter_name: chapter_name.value,
-    zoom: Number(mapRef.map.getZoom().toFixed(1)),
     lat: Number(mapRef.map.getCenter().lat.toFixed(3)),
     lng: Number(mapRef.map.getCenter().lng.toFixed(3)),
+    zoom: Number(mapRef.map.getZoom().toFixed(1)),
   };
   router.replace({ params: params });
 };
@@ -209,19 +209,13 @@ const flyTo = (center: number[], zoom: number | null) => {
 };
 
 const onClick = (e) => {
-  console.log(e);
-
-  mapStore.setFeatureUUID(e.features[0].properties.uuid);
-  // HACK: Chapter UUID is fetched from API based on properties uuid
-  mapStore.setChapterUUID(e.features[0].properties.uuid);
+  mapStore.setChapterId(e.features[0].properties.id);
   const center = e.features[0].geometry.coordinates.slice();
   moveMap(center, null);
 };
 
 const onEnter = (e) => {
-  mapStore.setFeatureUUID(e.properties.uuid);
-  // HACK: Chapter UUID is fetched from API based on properties uuid
-  mapStore.setChapterUUID(e.properties.uuid);
+  mapStore.setChapterId(e.properties.id);
   const center = e.geometry.coordinates.slice();
   moveMap(center, null);
 };
@@ -268,7 +262,7 @@ watch(
 );
 
 watch(
-  () => mapStore.chapterUUID,
+  () => mapStore.chapterId,
   () => {
     replaceRouterParams();
   }
