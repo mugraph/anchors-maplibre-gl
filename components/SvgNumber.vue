@@ -15,138 +15,18 @@
         :fg-color="fgColor"
         :bg-color="bgColor"
       />
-      <!-- equals 3 digits -->
       <g
-        v-if="realDigits.length === 3"
-        transform="scale (.8 .8) translate (-0.7 2.75)"
+        v-for="(d, i) in realDigits"
+        :key="d"
+        :transform="getTransform(d, i, realDigits.length)"
       >
-        <g v-for="(d, i) in realDigits" :key="d">
-          <g v-if="i === 0">
-            <g v-if="d === 1" transform="translate(-3.5, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <g v-else transform="translate(-3.5, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-          </g>
-          <g v-else-if="i === 1">
-            <!-- prev digit was 1 -->
-            <g v-if="realDigits[i - 1] === 1" transform="translate(2.75, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <!-- first digit was not 1  -->
-            <g v-else transform="translate(3.7, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-          </g>
-          <g v-else-if="i === 2">
-            <g v-if="realDigits[i - 1] === 1" transform="translate(10, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <g v-else-if="realDigits[i - 2] === 1" transform="translate(10, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <g v-else transform="translate(11, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-          </g>
-        </g>
-      </g>
-      <!-- no euqual 3 digits -->
-      <g v-else>
-        <g v-for="(d, i) in realDigits" :key="d">
-          <g v-if="realDigits.length === 1" transform="translate(0, 0)">
-            <SvgNumberPath
-              :digit="digits.fg[d]"
-              :style="'fg'"
-              :size="size"
-              :fg-color="fgColor"
-              :bg-color="bgColor"
-            />
-          </g>
-          <g v-else-if="i === 0">
-            <g v-if="d === 1" transform="translate(-4, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <g v-else transform="translate(-3.5, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-          </g>
-          <g v-else-if="i === 1">
-            <g v-if="realDigits[i - 1] === 1" transform="translate(3, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-            <g v-else transform="translate(3.5, 0)">
-              <SvgNumberPath
-                :digit="digits.fg[d]"
-                :style="'fg'"
-                :size="size"
-                :fg-color="fgColor"
-                :bg-color="bgColor"
-              />
-            </g>
-          </g>
-        </g>
+        <SvgNumberPath
+          :digit="digits.fg[d]"
+          :style="'fg'"
+          :size="size"
+          :fg-color="fgColor"
+          :bg-color="bgColor"
+        />
       </g>
     </svg>
   </div>
@@ -171,4 +51,24 @@ const realDigits = str.map(Number);
 defineExpose({
   svgRef,
 });
+
+const getTransform = (d, i, length) => {
+  if (length === 3) {
+    if (i === 0) {
+      return d === 1
+        ? 'translate(-3.5, 0)'
+        : 'translate(-3.5, 0) scale(.8 .8) translate(-0.7 2.75)';
+    } else if (i === 1) {
+      return realDigits[i - 1] === 1
+        ? 'translate(2.75, 0)'
+        : 'translate(3.7, 0)';
+    } else if (i === 2) {
+      return realDigits[i - 1] === 1 || realDigits[i - 2] === 1
+        ? 'translate(10, 0)'
+        : 'translate(11, 0)';
+    }
+  } else {
+    return 'translate(0, 0)';
+  }
+};
 </script>
