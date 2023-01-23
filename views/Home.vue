@@ -2,16 +2,8 @@
   <Navigation :nav-height="navHeight" />
   <div class="flex-grow w-full">
     <RouterView />
-    <!-- <RouterView :numSize="numSize" :arrLength="arrLength" /> -->
     <BottomSheet :top-offset="navHeight">
-      <ul>
-        <li v-for="i in 18" :key="i">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid,
-          rerum voluptates illum ratione porro quidem. Aliquid laudantium magnam
-          placeat recusandae unde, velit nobis error eius odio minima sed!
-          Porro, fugiat.
-        </li>
-      </ul>
+      <Content v-if="mapStore.chapters?.features" />
     </BottomSheet>
   </div>
   <div class="fixed bottom-6 z-[1002] left-1/2 -translate-x-1/2">
@@ -34,10 +26,10 @@
       v-if="snap.active === 0 || snap.active === 1"
       @click="setActive(2)"
       type="button"
-      class="text-white rounded bg-zinc-800 ring-2 ring-black/25"
+      class="bg-white rounded ring-2 ring-black/25"
       :delay="400"
     >
-      Close Content
+      Show Map
     </Button>
     <Button
       v-if="snap.active === 2 && mapStore.isReady"
@@ -47,7 +39,7 @@
       class="bg-white rounded ring-2 ring-black/25"
       :delay="400"
     >
-      Open Content
+      Show List
     </Button>
   </div>
 </template>

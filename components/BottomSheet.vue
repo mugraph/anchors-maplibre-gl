@@ -1,19 +1,23 @@
 <template>
   <!-- <BottomSheetHelper
-    :wrapperHeight="wrapperHeight"
-    :snapPoints="snapPoints"
-    :snapHeights="snapHeights"
+    :wrapper-height="wrapperHeight"
+    :snap-points="snapPoints"
+    :snap-heights="snapHeights"
     :threshold="threshold * 2"
-    :sheetHeight="sheetHeight"
-    :activeSnap="snap.active"
+    :sheet-height="sheetHeight"
+    :active-snap="snap.active"
   /> -->
   <div id="sheet-wrapper" :style="{ height: `${wrapperHeight}px` }">
-    <div id="sheet" ref="sheetRef" :style="{ height: `${sheetHeight}px` }">
+    <div
+      id="sheet"
+      ref="sheetRef"
+      class="bg-zinc-900"
+      :style="{ height: `${sheetHeight}px` }"
+    >
       <div id="sheet-header" ref="sheetHeaderRef"></div>
       <div
         id="sheet-content"
         ref="sheetContentRef"
-        class="px-14"
         :class="[getContentOverflow]"
       >
         <slot></slot>
@@ -75,7 +79,9 @@ const sheetHeight = computed(() => {
 });
 
 const getContentOverflow = computed(() =>
-  isDragging.value ? 'overflow-y-hidden' : 'overflow-y-auto'
+  isDragging.value
+    ? 'overflow-y-hidden pointer-events-none'
+    : 'overflow-y-auto pointer-events-auto'
 );
 
 const { motionProperties } = useMotionProperties(sheetRef);
@@ -134,6 +140,7 @@ function handleDrag(ctx) {
     // Snap to top
     if (sheetRef.value.clientHeight == max) {
       snap.setActive(snapHeights.value.indexOf(max - wrapperHeight.value));
+      snap.setCurrentOffset(sheetHeight.value);
     }
   } else {
     moveSheet(setY);
@@ -170,6 +177,7 @@ function handleDragEnd(ctx) {
     moveSheet(null);
   } else {
     snap.setActive(targetIndex);
+    snap.setCurrentOffset(sheetHeight.value);
   }
 }
 
@@ -200,7 +208,7 @@ onMounted(() => {
 useDrag(dragHandler, {
   domTarget: sheetRef,
   filterTaps: true,
-  useTouch: true,
+  useTouch: false,
 });
 
 watch(
@@ -224,7 +232,6 @@ watch(
 #sheet {
   position: relative;
   top: 100%;
-  background-color: wheat;
 }
 
 #sheet-header {
@@ -244,7 +251,7 @@ watch(
   left: 50%;
   transform: translateX(-50%);
   border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.14);
+  background-color: rgba(256, 256, 256, 0.44);
 }
 
 #sheet-content {

@@ -90,8 +90,8 @@
         params: {
           tour_name: tour.properties.common_name,
           zoom: 14,
-          lat: Number(tour.geometry.coordinates[1].toFixed(3)),
-          lng: Number(tour.geometry.coordinates[0].toFixed(3)),
+          lat: Number((tour.geometry as GeoJSON.Point).coordinates[1].toFixed(3)),
+          lng: Number((tour.geometry as GeoJSON.Point).coordinates[0].toFixed(3)),
         },
         query: {
           id: tour.id,
@@ -100,6 +100,11 @@
     >
       {{ tour.properties.title }}
     </RouterLink>
+    <Button
+      class="bg-white rounded ring-2 ring-black/25 px-3 py-1 mx-1"
+      @click="increaseProgress()"
+      >Progress +</Button
+    >
   </nav>
 </template>
 
@@ -140,6 +145,10 @@ const onMouseDown = (callback, val) => {
   interval.value = setInterval(function () {
     callback(val);
   }, 100);
+};
+
+const increaseProgress = () => {
+  mapStore.setProgress(mapStore.progress + 1);
 };
 
 const onMouseUp = () => {

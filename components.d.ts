@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     BottomSheetHelper: typeof import('./components/BottomSheetHelper.vue')['default']
     BottomSheetRewrite: typeof import('./components/BottomSheetRewrite.vue')['default']
     Button: typeof import('./components/Button.vue')['default']
+    Content: typeof import('./components/Content.vue')['default']
     LeafletMap: typeof import('./components/LeafletMap.vue')['default']
     MaplibreMap: typeof import('./components/MaplibreMap.vue')['default']
     MapLibreMap: typeof import('./components/MapLibreMap.vue')['default']
@@ -20,6 +21,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SimpleMap: typeof import('./components/SimpleMap.vue')['default']
+    SvgCircularProgress: typeof import('./components/SvgCircularProgress.vue')['default']
     SvgNumber: typeof import('./components/SvgNumber.vue')['default']
     SvgNumberPath: typeof import('./components/SvgNumberPath.vue')['default']
   }

@@ -22,6 +22,7 @@ export const useMapStore = defineStore('mapStore', {
       tour: null as GeoJSON.FeatureCollection,
       tourId: null as string,
       tours: null as GeoJSON.FeatureCollection,
+      progress: 37 as number,
     };
   },
   actions: {
@@ -35,6 +36,9 @@ export const useMapStore = defineStore('mapStore', {
     },
     setTourId(payload: string) {
       this.tourId = payload;
+    },
+    setProgress(payload: number) {
+      this.progress = payload;
     },
     async fetchTours(params: RouteParams) {
       this.isReady = false;

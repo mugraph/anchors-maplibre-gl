@@ -4,6 +4,18 @@ module.exports = {
   transparent: 'transparent',
   black: '#000',
   white: '#fff',
+  one: {
+    DEFAULT: '#FFE093',
+  },
+  two: {
+    DEFAULT: '#B8DFD8',
+  },
+  three: {
+    DEFAULT: '#E8F6EF',
+  },
+  four: {
+    DEFAULT: '#4C4C6D',
+  },
   tahiti: {
     100: '#cffafe',
     200: '#a5f3fc',

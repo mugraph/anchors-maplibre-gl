@@ -5,10 +5,15 @@
   >
     <SvgNumber
       v-for="(feature, index) in mapStore.chapters.features"
+      :id="feature.id"
       :number="index + 1"
       :size="32"
-      :fg-color="feature.id === mapStore.chapterId ? 'white' : 'black'"
-      :bg-color="feature.id === mapStore.chapterId ? '#843B62' : '#fafafa'"
+      :fg-color="
+        feature.id === mapStore.chapterId ? colors.zinc[900] : colors.zinc[900]
+      "
+      :bg-color="
+        feature.id === mapStore.chapterId ? colors.one.DEFAULT : colors.zinc[50]
+      "
       :key="svgKey + index"
       :ref="
         (el) => {
@@ -66,6 +71,8 @@ import { MapLibreOptions } from '@/types/MapLibreOptions';
 import { useMapStore } from '../../stores/map';
 import { useRoute, useRouter } from 'vue-router';
 import { nextTick } from 'vue';
+import colors from 'color-palette';
+import { useBottomSheetStore } from '../../stores/bottomSheet';
 
 MglDefaults.style =
   'https://api.maptiler.com/maps/basic-v2-dark/style.json?key=' +
@@ -76,6 +83,8 @@ const svgs = ref([]);
 const svgKey = ref(0);
 
 const mapStore = useMapStore();
+const snap = useBottomSheetStore();
+
 const showMap = ref(true);
 const router = useRouter();
 const route = useRoute();
@@ -97,9 +106,9 @@ const pathPaint = reactive({
 const boundsPaint = reactive({
   'circle-color': '#726f8c',
   'circle-opacity': 0.2,
-  'circle-radius': 25,
+  'circle-radius': 32,
   'circle-stroke-color': '#262240',
-  'circle-stroke-opacity': 0.15,
+  'circle-stroke-opacity': 0.01,
   'circle-stroke-width': 1,
 });
 
@@ -158,7 +167,7 @@ const moveMap = () => {
 };
 
 const flyTo = (center: number[], zoom: number | null) => {
-  mapRef.map.flyTo({
+  mapRef.map.easeTo({
     center: center,
     zoom:
       zoom === null
@@ -169,6 +178,7 @@ const flyTo = (center: number[], zoom: number | null) => {
     speed: 0.8,
     curve: 1.25,
     essential: true,
+    padding: { bottom: snap.currentOffset },
     easing(t) {
       return t;
     },
@@ -177,14 +187,14 @@ const flyTo = (center: number[], zoom: number | null) => {
 
 const onClick = (e) => {
   mapStore.setChapterId(e.features[0].properties.id);
-  const center = e.features[0].geometry.coordinates.slice();
-  flyTo(center, null);
+  // const center = e.features[0].geometry.coordinates.slice();
+  // flyTo(center, null);
 };
 
 const onEnter = (e) => {
   mapStore.setChapterId(e.properties.id);
-  const center = e.geometry.coordinates.slice();
-  flyTo(center, null);
+  //const center = e.geometry.coordinates.slice();
+  //flyTo(center, null);
 };
 
 const onMouseEnter = () => {
@@ -232,6 +242,22 @@ watch(
   () => mapStore.chapterId,
   () => {
     replaceRouterParams();
+    const newCenter = mapStore.chapters.features
+      .find((e) => e.id === mapStore.chapterId)
+      .geometry.coordinates.slice();
+    flyTo(newCenter, null);
+  }
+);
+
+watch(
+  () => snap.currentOffset,
+  () => {
+    if (mapStore.chapters?.features) {
+      const newCenter = mapStore.chapters.features
+        .find((e) => e.id === mapStore.chapterId)
+        .geometry.coordinates.slice();
+      flyTo(newCenter, null);
+    }
   }
 );
 
