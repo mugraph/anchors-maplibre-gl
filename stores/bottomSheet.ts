@@ -12,7 +12,6 @@ export const useBottomSheetStore = defineStore('snap', {
       this.active = payload;
     },
     setCurrentOffset(payload: number) {
-      console.log(payload);
       this.currentOffset = payload;
     },
   },

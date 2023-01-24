@@ -35,7 +35,20 @@
     @map:moveend="replaceRouterParams"
     @map:click="onMapclick"
   >
+    <mgl-raster-source
+      source-id="raster-tiles"
+      :tiles="tiles"
+      :tile-size="256"
+      scheme="tms"
     >
+      <mgl-raster-layer
+        layer-id="raster"
+        source="raster-tiles"
+        :minzoom="0"
+        :maxzoom="22"
+        :paint="{ 'raster-opacity': 0.4 }"
+      />
+    </mgl-raster-source>
     <mgl-navigation-control />
     <mgl-geolocation-control />
     <mgl-geo-json-source source-id="path" :data="mapStore.path">
@@ -97,6 +110,8 @@ const options: MapLibreOptions = reactive({
     : [10.288107, 49.405078],
   zoom: route.params ? Number(route.params.zoom) : 14,
 });
+
+const tiles = ref(['/tiles/{z}/{x}/{y}.png']);
 
 const pathPaint = reactive({
   'line-color': 'lightblue',
@@ -166,7 +181,7 @@ const moveMap = () => {
   }
 };
 
-const flyTo = (center: number[], zoom: number | null) => {
+const easeTo = (center: number[], zoom: number | null) => {
   mapRef.map.easeTo({
     center: center,
     zoom:
@@ -187,14 +202,10 @@ const flyTo = (center: number[], zoom: number | null) => {
 
 const onClick = (e) => {
   mapStore.setChapterId(e.features[0].properties.id);
-  // const center = e.features[0].geometry.coordinates.slice();
-  // flyTo(center, null);
 };
 
 const onEnter = (e) => {
   mapStore.setChapterId(e.properties.id);
-  //const center = e.geometry.coordinates.slice();
-  //flyTo(center, null);
 };
 
 const onMouseEnter = () => {
@@ -245,18 +256,18 @@ watch(
     const newCenter = mapStore.chapters.features
       .find((e) => e.id === mapStore.chapterId)
       .geometry.coordinates.slice();
-    flyTo(newCenter, null);
+    easeTo(newCenter, null);
   }
 );
 
 watch(
   () => snap.currentOffset,
   () => {
-    if (mapStore.chapters?.features) {
+    if (mapStore.chapters?.features && mapStore.chapterId) {
       const newCenter = mapStore.chapters.features
         .find((e) => e.id === mapStore.chapterId)
         .geometry.coordinates.slice();
-      flyTo(newCenter, null);
+      easeTo(newCenter, null);
     }
   }
 );

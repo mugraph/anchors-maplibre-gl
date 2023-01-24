@@ -18,7 +18,7 @@
       <div
         id="sheet-content"
         ref="sheetContentRef"
-        :class="[getContentOverflow]"
+        :class="[scrollAndPointerClasses]"
       >
         <slot></slot>
       </div>
@@ -57,7 +57,6 @@ const wrapperHeight = computed(() => {
   return windowHeight.value - props.topOffset;
 });
 
-// Define threshold
 const threshold = computed(() => {
   return wrapperHeight.value * 0.15;
 });
@@ -78,7 +77,7 @@ const sheetHeight = computed(() => {
   return wrapperHeight.value - y;
 });
 
-const getContentOverflow = computed(() =>
+const scrollAndPointerClasses = computed(() =>
   isDragging.value
     ? 'overflow-y-hidden pointer-events-none'
     : 'overflow-y-auto pointer-events-auto'

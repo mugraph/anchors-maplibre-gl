@@ -1,4 +1,5 @@
 node_modules
 *.local
 *.vscode
-assets/tiles/*
+public/tiles/*
+plugins/vue-maplibre-*
