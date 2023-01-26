@@ -1,4 +1,4 @@
-# achors-maplibre-gl
+# anchors-maplibre-gl
 
 ## License
 
