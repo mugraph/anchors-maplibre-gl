@@ -5,7 +5,7 @@ import '@vue/runtime-core'
 
 export {}
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface GlobalComponents {
     BottomSheet: typeof import('./components/BottomSheet.vue')['default']
     BottomSheetHelper: typeof import('./components/BottomSheetHelper.vue')['default']
